@@ -1,1 +1,1 @@
-SUBDIRS = dummy shell fb
+SUBDIRS = dummy shell fb audio

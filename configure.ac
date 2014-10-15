@@ -19,4 +19,5 @@ AC_CONFIG_FILES([src/Makefile])
 AC_CONFIG_FILES([src/dummy/Makefile])
 AC_CONFIG_FILES([src/shell/Makefile])
 AC_CONFIG_FILES([src/fb/Makefile])
+AC_CONFIG_FILES([src/audio/Makefile])
 AC_OUTPUT
