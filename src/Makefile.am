@@ -1,1 +1,1 @@
-SUBDIRS = dummy
+SUBDIRS = dummy shell

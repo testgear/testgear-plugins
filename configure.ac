@@ -17,4 +17,5 @@ AC_PROG_INSTALL
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([src/Makefile])
 AC_CONFIG_FILES([src/dummy/Makefile])
+AC_CONFIG_FILES([src/shell/Makefile])
 AC_OUTPUT
