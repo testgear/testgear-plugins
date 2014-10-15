@@ -1,1 +1,1 @@
-SUBDIRS = dummy shell
+SUBDIRS = dummy shell fb
