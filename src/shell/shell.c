@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include "testgeard/plugin.h"
+#include "testgear/plugin.h"
 
 static int shell_command(void)
 {

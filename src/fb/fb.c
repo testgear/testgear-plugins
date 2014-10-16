@@ -39,7 +39,7 @@
 #include <linux/fb.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
-#include "testgeard/plugin.h"
+#include "testgear/plugin.h"
 
 #define BIT8_RED   0xE0
 #define BIT8_GREEN 0x1C

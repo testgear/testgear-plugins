@@ -41,7 +41,7 @@
 #include <alsa/asoundlib.h>
 #include <alsa/pcm.h>
 #include <audiofile.h>
-#include "testgeard/plugin.h"
+#include "testgear/plugin.h"
 
 static int audio_load(void)
 {
