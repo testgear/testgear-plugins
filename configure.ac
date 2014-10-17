@@ -19,21 +19,21 @@ if test "x$enable_dummy" != "xno"; then
 fi
 
 # Shell plugin checks
-AC_ARG_ENABLE([shell], AS_HELP_STRING([--disable-shell], [Disable shell plugin]), [enable_shell="yes"], [enable_shell="check"])
+AC_ARG_ENABLE([shell], AS_HELP_STRING([--disable-shell], [Disable shell plugin]), [], [enable_shell="check"])
 if test "x$enable_shell" != "xno"; then
     TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED shell"
     enable_shell="yes"
 fi
 
 # Framebuffer plugin checks
-AC_ARG_ENABLE([fb], AS_HELP_STRING([--disable-fb], [Disable framebuffer plugin]), [enable_fb="yes"], [enable_fb="check"])
+AC_ARG_ENABLE([fb], AS_HELP_STRING([--disable-fb], [Disable framebuffer plugin]), [], [enable_fb="check"])
 if test "x$enable_fb" != "xno"; then
     TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED fb"
     enable_fb="yes"
 fi
 
 # Audio plugin checks
-AC_ARG_ENABLE([audio], AS_HELP_STRING([--disable-audio], [Disable audio plugin]), [enable_audio="yes"], [enable_audio="check"])
+AC_ARG_ENABLE([audio], AS_HELP_STRING([--disable-audio], [Disable audio plugin]), [], [enable_audio="check"])
 if test "x$enable_audio" != "xno"; then
     AC_CHECK_LIB([m], [cos], [have_libm="yes"], [AC_MSG_NOTICE(libm not found)])
     AC_CHECK_LIB([asound], [snd_pcm_open], [have_libasound="yes"], [AC_MSG_NOTICE(libasound not found)])
