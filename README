@@ -4,7 +4,8 @@
 
 1. Introduction
 
-    This is the Test Gear plugins used for testing and/or interfacing hardware.
+    This is the Test Gear plugins used for testing and/or interfacing hardware
+    (devices, instruments, etc.).
 
     Each test plugin offers various parameters (variables) and commands
     (functions) which can be queried or fired from the Test Gear client.
