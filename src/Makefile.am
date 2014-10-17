@@ -1,1 +1,2 @@
-SUBDIRS = dummy shell fb audio
+SUBDIRS = $(TG_PLUGINS_SELECTED)
+DIST_SUBDIRS = $(TG_PLUGINS_ALL)

@@ -11,6 +11,42 @@ AC_ENABLE_SHARED
 LT_PREREQ([2.2])
 LT_INIT
 
+# Dummy plugin checks
+AC_ARG_ENABLE([dummy], AS_HELP_STRING([--disable-dummy], [Disable dummy plugin]), [], [enable_dummy="check"])
+if test "x$enable_dummy" != "xno"; then
+    TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED dummy"
+    enable_dummy="yes"
+fi
+
+# Shell plugin checks
+AC_ARG_ENABLE([shell], AS_HELP_STRING([--disable-shell], [Disable shell plugin]), [enable_shell="yes"], [enable_shell="check"])
+if test "x$enable_shell" != "xno"; then
+    TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED shell"
+    enable_shell="yes"
+fi
+
+# Framebuffer plugin checks
+AC_ARG_ENABLE([fb], AS_HELP_STRING([--disable-fb], [Disable framebuffer plugin]), [enable_fb="yes"], [enable_fb="check"])
+if test "x$enable_fb" != "xno"; then
+    TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED fb"
+    enable_fb="yes"
+fi
+
+# Audio plugin checks
+AC_ARG_ENABLE([audio], AS_HELP_STRING([--disable-audio], [Disable audio plugin]), [enable_audio="yes"], [enable_audio="check"])
+if test "x$enable_audio" != "xno"; then
+    AC_CHECK_LIB([m], [cos], [have_libm="yes"], [AC_MSG_NOTICE(libm not found)])
+    AC_CHECK_LIB([asound], [snd_pcm_open], [have_libasound="yes"], [AC_MSG_NOTICE(libasound not found)])
+    AC_CHECK_LIB([audiofile], [afOpenFile], [have_libaudiofile="yes"], [AC_MSG_NOTICE(libaudiofile not found)])
+
+    if test "x$have_libm" = "xyes" && test "x$have_libasound" = "xyes" && test "x$have_libaudiofile" = "xyes"; then
+        TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED audio"
+        enable_audio="yes"
+    else
+        enable_audio="no"
+    fi
+fi
+
 AC_CONFIG_MACRO_DIR([m4])
 AC_LANG([C])
 AC_PROG_INSTALL
@@ -20,4 +56,17 @@ AC_CONFIG_FILES([src/dummy/Makefile])
 AC_CONFIG_FILES([src/shell/Makefile])
 AC_CONFIG_FILES([src/fb/Makefile])
 AC_CONFIG_FILES([src/audio/Makefile])
+AC_SUBST(TG_PLUGINS_SELECTED)
+AC_SUBST(TG_PLUGINS_ALL, "dummy shell fb audio")
 AC_OUTPUT
+
+cat <<EOF
+
+$PACKAGE-$VERSION configuration summary:
+
+    Build dummy plugin ............... : ${enable_dummy}
+    Build shell plugin ............... : ${enable_shell}
+    Build fb plugin .................. : ${enable_fb}
+    Build audio plugin ............... : ${enable_audio}
+
+EOF
