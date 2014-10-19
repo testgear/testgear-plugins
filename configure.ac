@@ -47,6 +47,13 @@ if test "x$enable_audio" != "xno"; then
     fi
 fi
 
+# CPU plugin checks
+AC_ARG_ENABLE([cpu], AS_HELP_STRING([--disable-cpu], [Disable cpu plugin]), [], [enable_cpu="check"])
+if test "x$enable_cpu" != "xno"; then
+    TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED cpu"
+    enable_cpu="yes"
+fi
+
 AC_CONFIG_MACRO_DIR([m4])
 AC_LANG([C])
 AC_PROG_INSTALL
@@ -56,8 +63,9 @@ AC_CONFIG_FILES([src/dummy/Makefile])
 AC_CONFIG_FILES([src/shell/Makefile])
 AC_CONFIG_FILES([src/fb/Makefile])
 AC_CONFIG_FILES([src/audio/Makefile])
+AC_CONFIG_FILES([src/cpu/Makefile])
 AC_SUBST(TG_PLUGINS_SELECTED)
-AC_SUBST(TG_PLUGINS_ALL, "dummy shell fb audio")
+AC_SUBST(TG_PLUGINS_ALL, "dummy shell fb audio cpu")
 AC_OUTPUT
 
 cat <<EOF
@@ -68,5 +76,6 @@ $PACKAGE-$VERSION configuration summary:
     Build shell plugin ............... : ${enable_shell}
     Build fb plugin .................. : ${enable_fb}
     Build audio plugin ............... : ${enable_audio}
+    Build cpu plugin ................. : ${enable_cpu}
 
 EOF
