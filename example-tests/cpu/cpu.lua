@@ -10,7 +10,8 @@ device.cpu.threads = 8
 status = device.cpu.start()
 if (status ~= 0) then fail() end
 -- tg
-sleep(120)
+-- Stress CPU for 60 s
+sleep(60)
 -- tg
 status = device.cpu.stop()
 if (status ~= 0) then fail() end
