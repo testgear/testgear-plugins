@@ -50,8 +50,14 @@ fi
 # CPU plugin checks
 AC_ARG_ENABLE([cpu], AS_HELP_STRING([--disable-cpu], [Disable cpu plugin]), [], [enable_cpu="check"])
 if test "x$enable_cpu" != "xno"; then
-    TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED cpu"
-    enable_cpu="yes"
+    AC_CHECK_LIB([pthread], [pthread_create], [have_libpthread="yes"], [AC_MSG_NOTICE(libpthread not found)])
+
+    if test "x$have_libpthread" = "xyes"; then
+        TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED cpu"
+        enable_cpu="yes"
+    else
+        enable_cpu="no"
+    fi
 fi
 
 AC_CONFIG_MACRO_DIR([m4])
