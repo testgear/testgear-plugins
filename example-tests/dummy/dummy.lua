@@ -2,9 +2,8 @@
 -- Dummy test script
 --
 
--- To run test script simply do (in src/ dir):
--- ./testgearctl ../tests/dummy.lua
---
+-- To run test script simply do:
+-- testgearctl dummy.lua
 
 -- tg
 -- Dummy test case

@@ -1,5 +1,5 @@
 --
--- Multi server test script
+-- Multi server test script (example)
 --
 -- tg
 server0_address = "tcp://127.0.0.1:8000"

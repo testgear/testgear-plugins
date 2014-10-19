@@ -1,5 +1,5 @@
 --
--- CPU test script
+-- CPU test script (example)
 --
 
 -- tg

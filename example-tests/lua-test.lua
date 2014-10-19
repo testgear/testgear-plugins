@@ -1,5 +1,5 @@
 --
--- Lua test script
+-- Lua test script (example)
 --
 
 -- To run this test script simply do (in src/ dir):

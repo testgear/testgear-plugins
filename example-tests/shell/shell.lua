@@ -1,5 +1,5 @@
 --
--- Shell test script
+-- Shell test script (example)
 --
 
 -- tg
