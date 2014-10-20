@@ -82,7 +82,7 @@ static int keyboard_wait_event(void)
         return EXIT_FAILURE;
     }
 
-    input_device = libinput_path_add_device(input, "/dev/input/by-id/usb-04f3_0103-event-kbd");
+    input_device = libinput_path_add_device(input, get_string("device"));
     if (input_device == NULL)
     {
         printf("libinput_path_add_device() failed\n");
