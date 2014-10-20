@@ -32,6 +32,7 @@ device.audio.generate_tone()
 -- Generate noise
 device.audio.tone_type = "noise"
 device.audio.generate_tone()
+-- tg
 -- Play WAV file
 --device.audio.wav_file = "test.wav"
 --status = device.audio.play_wav()
