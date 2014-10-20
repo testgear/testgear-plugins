@@ -35,9 +35,9 @@ fi
 # Audio plugin checks
 AC_ARG_ENABLE([audio], AS_HELP_STRING([--disable-audio], [Disable audio plugin]), [], [enable_audio="check"])
 if test "x$enable_audio" != "xno"; then
-    AC_CHECK_LIB([m], [cos], [have_libm="yes"], [AC_MSG_NOTICE(libm not found)])
-    AC_CHECK_LIB([asound], [snd_pcm_open], [have_libasound="yes"], [AC_MSG_NOTICE(libasound not found)])
-    AC_CHECK_LIB([audiofile], [afOpenFile], [have_libaudiofile="yes"], [AC_MSG_NOTICE(libaudiofile not found)])
+    AC_CHECK_LIB([m], [cos], [have_libm="yes"], [AC_MSG_WARN(libm not found)])
+    AC_CHECK_LIB([asound], [snd_pcm_open], [have_libasound="yes"], [AC_MSG_WARN(libasound not found)])
+    AC_CHECK_LIB([audiofile], [afOpenFile], [have_libaudiofile="yes"], [AC_MSG_WARN(libaudiofile not found)])
 
     if test "x$have_libm" = "xyes" && test "x$have_libasound" = "xyes" && test "x$have_libaudiofile" = "xyes"; then
         TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED audio"
@@ -50,13 +50,26 @@ fi
 # CPU plugin checks
 AC_ARG_ENABLE([cpu], AS_HELP_STRING([--disable-cpu], [Disable cpu plugin]), [], [enable_cpu="check"])
 if test "x$enable_cpu" != "xno"; then
-    AC_CHECK_LIB([pthread], [pthread_create], [have_libpthread="yes"], [AC_MSG_NOTICE(libpthread not found)])
+    AC_CHECK_LIB([pthread], [pthread_create], [have_libpthread="yes"], [AC_MSG_WARN(libpthread not found)])
 
     if test "x$have_libpthread" = "xyes"; then
         TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED cpu"
         enable_cpu="yes"
     else
         enable_cpu="no"
+    fi
+fi
+
+# Keyboard input plugin checks
+AC_ARG_ENABLE([keyboard], AS_HELP_STRING([--disable-keyboard], [Disable keyboard plugin]), [], [enable_keyboard="check"])
+if test "x$enable_keyboard" != "xno"; then
+    AC_CHECK_LIB([input], [libinput_path_create_context], [have_libinput="yes"], [AC_MSG_WARN(libinput not found)])
+
+    if test "x$have_libinput" = "xyes"; then
+        TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED keyboard"
+        enable_keyboard="yes"
+    else
+        enable_keyboard="no"
     fi
 fi
 
@@ -70,8 +83,9 @@ AC_CONFIG_FILES([src/shell/Makefile])
 AC_CONFIG_FILES([src/fb/Makefile])
 AC_CONFIG_FILES([src/audio/Makefile])
 AC_CONFIG_FILES([src/cpu/Makefile])
+AC_CONFIG_FILES([src/keyboard/Makefile])
 AC_SUBST(TG_PLUGINS_SELECTED)
-AC_SUBST(TG_PLUGINS_ALL, "dummy shell fb audio cpu")
+AC_SUBST(TG_PLUGINS_ALL, "dummy shell fb audio cpu keyboard")
 AC_OUTPUT
 
 cat <<EOF
@@ -83,5 +97,6 @@ $PACKAGE-$VERSION configuration summary:
     Build fb plugin .................. : ${enable_fb}
     Build audio plugin ............... : ${enable_audio}
     Build cpu plugin ................. : ${enable_cpu}
+    Build keyboard plugin ............ : ${enable_keyboard}
 
 EOF
