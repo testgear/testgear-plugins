@@ -133,12 +133,9 @@ static int keyboard_wait_event(void)
 
         libinput_dispatch(input);
 
-        if (FD_ISSET(fd, &rdfs))
-        {
-            FD_ZERO(&rdfs);
-            FD_SET(fd, &rdfs);
-            tv.tv_sec = 10;
-        }
+        FD_ZERO(&rdfs);
+        FD_SET(fd, &rdfs);
+        tv.tv_sec = 10;
     }
 
     return EXIT_FAILURE;
