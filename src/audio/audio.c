@@ -49,10 +49,10 @@ static int audio_load(void)
     set_string("device", "default");
     set_int("rate", 44100);
     set_string("mode", "stereo");
-    set_string("tone-type", "sine");
-    set_int("tone-frequency", 1000);
-    set_int("tone-time", 2000);
-    set_string("wav-file", "test.wav");
+    set_string("tone_type", "sine");
+    set_int("tone_frequency", 1000);
+    set_int("tone_time", 2000);
+    set_string("wav_file", "test.wav");
 
     return 0;
 }
@@ -70,7 +70,7 @@ static int audio_play_wav(void)
     int channels;
 
     char *device = get_string("device");
-    char *wav_file = get_string("wav-file");
+    char *wav_file = get_string("wav_file");
 
     // Open audio file
     AFfilehandle filehandle = afOpenFile(wav_file, "r", NULL);
@@ -209,9 +209,9 @@ static int audio_generate_tone(void)
     int rate = get_int("rate");
 
     // Tone settings
-    char *tone_type = get_string("tone-type");
-    int tone_frequency = get_int("tone-frequency");
-    int tone_time = get_int("tone-time");
+    char *tone_type = get_string("tone_type");
+    int tone_frequency = get_int("tone_frequency");
+    int tone_time = get_int("tone_time");
 
     // Allocate buffer for 1 sec tone sample
     buffer_size = rate;
@@ -299,31 +299,31 @@ static struct plugin_properties audio_properties[] =
         .type = STRING,
         .description = "Audio mode (stereo, mono)" },
 
-    {   .name = "tone-type",
+    {   .name = "tone_type",
         .type = STRING,
         .description = "Tone type (sine, square, triangle, pulse, sawtooth, noise)" },
 
-    {   .name = "tone-frequency",
+    {   .name = "tone_frequency",
         .type = INT,
         .description = "Tone frequency [Hz]" },
 
-    {   .name = "tone-time",
+    {   .name = "tone_time",
         .type = INT,
         .description = "Tone duration [s]" },
 
-    {   .name = "wav-file",
+    {   .name = "wav_file",
         .type = STRING,
         .description = "WAV file for playback" },
 
-    {   .name = "generate-tone",
+    {   .name = "generate_tone",
         .type = COMMAND,
         .function = audio_generate_tone,
         .description = "Generate sine tone" },
 
-    {   .name = "play-wav",
+    {   .name = "play_wav",
         .type = COMMAND,
         .function = audio_play_wav,
-        .description = "Generate wav file" },
+        .description = "Play wav file" },
 
     { }
 };

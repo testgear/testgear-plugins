@@ -7,30 +7,34 @@ device = connect("tcp://127.0.0.1:8000")
 device.load("audio")
 -- tg
 -- Audio configuration
-deivce.audio.device = "default"
+device.audio.device = "default"
 device.audio.rate = 44100
+device.audio.mode = "stereo"
 -- tg
--- Generate 200 Hz tone
-device.audio.tone-type = "sine"
-device.audio.tone-frequency = 200
-device.audio.tone-time = 1
-device.audio.generate-tone()
+-- Generate 200 Hz sine tone
+device.audio.tone_type = "sine"
+device.audio.tone_frequency = 200
+device.audio.tone_time = 2
+device.audio.generate_tone()
 -- tg
--- Generate 400 Hz tone
-device.audio.tone-frequency = 400
-device.audio.generate-tone()
--- Generate 800 Hz tone
-device.audio.tone-frequency = 800
-device.audio.generate-tone()
--- Generate 1600 Hz tone
-device.audio.tone-frequency = 1600
-device.audio.generate-tone()
+-- Generate 400 Hz sine tone
+device.audio.tone_frequency = 400
+device.audio.generate_tone()
+-- tg
+-- Generate 800 Hz sine tone
+device.audio.tone_frequency = 800
+device.audio.generate_tone()
+-- tg
+-- Generate 1600 Hz sine tone
+device.audio.tone_frequency = 1600
+device.audio.generate_tone()
+-- tg
 -- Generate noise
-device.audio.tone-type = "noise"
-device.audio.generate-tone()
+device.audio.tone_type = "noise"
+device.audio.generate_tone()
 -- Play WAV file
---device.audio.wav-file = "test.wav"
---status = device.audio.play-wav()
+--device.audio.wav_file = "test.wav"
+--status = device.audio.play_wav()
 --if (status ~= 0) then fail() end
 -- tg
 device.unload("audio")
