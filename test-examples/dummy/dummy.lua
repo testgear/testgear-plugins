@@ -2,9 +2,6 @@
 -- Dummy test script
 --
 
--- To run test script simply do:
--- testgearctl dummy.lua
-
 -- tg
 -- Dummy test case
 device = connect("tcp://127.0.0.1:8000")

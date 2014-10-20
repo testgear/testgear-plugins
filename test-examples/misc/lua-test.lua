@@ -2,10 +2,6 @@
 -- Lua test script (example)
 --
 
--- To run this test script simply do (in src/ dir):
--- ./testgearctl ../tests/lua-tests.lua
---
-
 -- tg
 -- Print stuff to screen
 print("GREETINGS PROFESSOR FALKEN")
