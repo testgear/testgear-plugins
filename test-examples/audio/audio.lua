@@ -1,6 +1,8 @@
 --
 -- Audio test script (example)
 --
+-- http://testgear.io
+--
 
 -- tg
 device = connect("tcp://127.0.0.1:8000")
