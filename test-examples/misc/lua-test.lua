@@ -1,6 +1,8 @@
 --
 -- Lua test script (example)
 --
+-- http://testgear.io
+--
 
 -- tg
 -- Print stuff to screen

@@ -1,6 +1,8 @@
 --
 -- Multi server test script (example)
 --
+-- http://testgear.io
+--
 
 -- tg
 server0_address = "tcp://127.0.0.1:8000"
