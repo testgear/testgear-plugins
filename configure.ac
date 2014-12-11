@@ -73,6 +73,20 @@ if test "x$enable_keyboard" != "xno"; then
     fi
 fi
 
+# USB plugin checks
+AC_ARG_ENABLE([cpu], AS_HELP_STRING([--disable-usb], [Disable usb plugin]), [], [enable_usb="check"])
+if test "x$enable_usb" != "xno"; then
+    AC_CHECK_LIB([pthread], [pthread_create], [have_libpthread="yes"], [AC_MSG_WARN(libpthread not found)])
+    AC_CHECK_LIB([usb], [usb_init], [have_libusb="yes"], [AC_MSG_WARN(libusb not found)])
+
+    if test "x$have_libpthread" = "xyes" && test "x$have_libusb" = "xyes"; then
+        TG_PLUGINS_SELECTED="$TG_PLUGINS_SELECTED usb"
+        enable_usb="yes"
+    else
+        enable_usb="no"
+    fi
+fi
+
 AC_CONFIG_MACRO_DIR([m4])
 AC_LANG([C])
 AC_PROG_INSTALL
@@ -84,6 +98,7 @@ AC_CONFIG_FILES([src/fb/Makefile])
 AC_CONFIG_FILES([src/audio/Makefile])
 AC_CONFIG_FILES([src/cpu/Makefile])
 AC_CONFIG_FILES([src/keyboard/Makefile])
+AC_CONFIG_FILES([src/usb/Makefile])
 AC_SUBST(TG_PLUGINS_SELECTED)
 AC_SUBST(TG_PLUGINS_ALL, "dummy shell fb audio cpu keyboard")
 AC_OUTPUT
@@ -98,5 +113,6 @@ $PACKAGE-$VERSION configuration summary:
     Build audio plugin ............... : ${enable_audio}
     Build cpu plugin ................. : ${enable_cpu}
     Build keyboard plugin ............ : ${enable_keyboard}
+    Build usb plugin ................. : ${enable_usb}
 
 EOF
