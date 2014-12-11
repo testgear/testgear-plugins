@@ -33,5 +33,5 @@ if (device.dummy.string0 ~= "Hello world!") then fail() end
 -- tg
 device.dummy.command0()
 -- tg
---device.unload("dummy")
---disconnect(device)
+device.unload("dummy")
+disconnect(device)
