@@ -244,7 +244,7 @@ static int audio_generate_tone(void)
     if ((error = snd_pcm_open(&handle, device, SND_PCM_STREAM_PLAYBACK, 0)) < 0)
     {
         log_error("Playback open error: %s", snd_strerror(error));
-        exit(EXIT_FAILURE);
+        return EXIT_FAILURE;
     }
 
     // Configure audio device
