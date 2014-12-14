@@ -76,7 +76,7 @@ static int audio_play_wav(void)
     AFfilehandle filehandle = afOpenFile(wav_file, "r", NULL);
     if (filehandle == AF_NULL_FILEHANDLE)
     {
-        printf("Error: Could not open audio file\n");
+        log_error("Could not open audio file");
         return EXIT_FAILURE;
     }
 
@@ -90,20 +90,20 @@ static int audio_play_wav(void)
     // WAV file sanity checks
     if ((sample_format != AF_SAMPFMT_TWOSCOMP) && (sample_format != AF_SAMPFMT_UNSIGNED))
     {
-        printf("Error: The audio file must contain integer data in two's complement or unsigned format.\n");
+        log_error("The audio file must contain integer data in two's complement or unsigned format.");
         return EXIT_FAILURE;
     }
 
     if (channels > 2)
     {
-        printf("Error: More than 2 channels is not supported.\n");
+        log_error("More than 2 channels is not supported.");
         return EXIT_FAILURE;
     }
 
     // Open audio device
     if ((error = snd_pcm_open(&pcm_handle, device, SND_PCM_STREAM_PLAYBACK, 0)) < 0)
     {
-        printf("Error: %s\n", snd_strerror(error));
+        log_error("%s", snd_strerror(error));
         return EXIT_FAILURE;
     }
 
@@ -112,13 +112,13 @@ static int audio_play_wav(void)
     snd_pcm_hw_params_any(pcm_handle, hw_params);
 
     if ((error = snd_pcm_hw_params_set_access(pcm_handle, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED)) < 0)
-        printf("Error: %s\n", snd_strerror(error));
+        log_error("%s", snd_strerror(error));
 
     if ((error = snd_pcm_hw_params_set_channels(pcm_handle, hw_params, channels)) < 0)
-        printf("Error: %s\n", snd_strerror(error));
+        log_error("%s", snd_strerror(error));
 
     if ((error = snd_pcm_hw_params_set_rate_near(pcm_handle, hw_params, &rate, 0)) < 0)
-        printf("Error: %s\n", snd_strerror(error));
+        log_error("%s", snd_strerror(error));
 
     switch (sample_width)
     {
@@ -128,12 +128,12 @@ static int audio_play_wav(void)
                 case AF_SAMPFMT_TWOSCOMP:
                     // Signed 8-bit
                     if ((error = snd_pcm_hw_params_set_format(pcm_handle, hw_params, SND_PCM_FORMAT_S8)) < 0)
-                        printf("Error: %s\n", snd_strerror(error));
+                        log_error("%s", snd_strerror(error));
                     break;
                 case AF_SAMPFMT_UNSIGNED:
                     // Unsigned 8-bit
                     if ((error = snd_pcm_hw_params_set_format(pcm_handle, hw_params, SND_PCM_FORMAT_U8)) < 0)
-                        printf("Error: %s\n", snd_strerror(error));
+                        log_error("%s", snd_strerror(error));
                     break;
             }
             break;
@@ -143,19 +143,19 @@ static int audio_play_wav(void)
                 case AF_SAMPFMT_TWOSCOMP:
                     // Signed 16-bit
                     if ((error = snd_pcm_hw_params_set_format(pcm_handle, hw_params, SND_PCM_FORMAT_S16_LE)) < 0)
-                        printf("Error: %s\n", snd_strerror(error));
+                        log_error("%s", snd_strerror(error));
                     break;
                 case AF_SAMPFMT_UNSIGNED:
                     // Unsigned 16-bit
                     if ((error = snd_pcm_hw_params_set_format(pcm_handle, hw_params, SND_PCM_FORMAT_U8)) < 0)
-                        printf("Error: %s\n", snd_strerror(error));
+                        log_error("%s", snd_strerror(error));
                     break;
             }
             break;
     }
 
     if ((error = snd_pcm_hw_params(pcm_handle, hw_params)) < 0)
-        printf("Error: %s\n", snd_strerror(error));
+        log_error("%s", snd_strerror(error));
 
     snd_pcm_hw_params_get_period_size(hw_params, &frames, 0);
 
@@ -163,7 +163,7 @@ static int audio_play_wav(void)
     void *buffer = malloc(frames * frame_size);
     if (buffer == NULL)
     {
-        printf("Error: Could not allocate audio buffer.\n");
+        log_error("Could not allocate audio buffer.");
         return EXIT_FAILURE;
     }
 
@@ -176,11 +176,11 @@ static int audio_play_wav(void)
 
         if ((error = snd_pcm_writei(pcm_handle, buffer, frames_read)) == -EPIPE)
         {
-            printf("Audio buffer Underrun!\n");
+            log_error("Audio buffer underrun!");
             snd_pcm_prepare(pcm_handle);
         } else if (error < 0)
         {
-            printf("Error: %s\n", snd_strerror(error));
+            log_error("%s", snd_strerror(error));
             break;
         }
     }
@@ -236,14 +236,14 @@ static int audio_generate_tone(void)
     }
     else
     {
-        printf("Unknown tone type\n");
+        log_error("Unknown tone type");
         return -1;
     }
 
     // Open audio device
     if ((error = snd_pcm_open(&handle, device, SND_PCM_STREAM_PLAYBACK, 0)) < 0)
     {
-        printf("Playback open error: %s\n", snd_strerror(error));
+        log_error("Playback open error: %s", snd_strerror(error));
         exit(EXIT_FAILURE);
     }
 
@@ -256,7 +256,7 @@ static int audio_generate_tone(void)
                     1, // Soft resample
                     500000)) < 0)
     {
-        printf("Playback open error: %s\n", snd_strerror(error));
+        log_error("Playback open error: %s", snd_strerror(error));
         return EXIT_FAILURE;
     }
 
@@ -270,7 +270,7 @@ static int audio_generate_tone(void)
 
         if (error < 0)
         {
-            printf("snd_pcm_writei() failed: %s\n", snd_strerror(error));
+            log_error("snd_pcm_writei() failed: %s", snd_strerror(error));
             break;
         }
     }

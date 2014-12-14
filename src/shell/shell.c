@@ -43,7 +43,7 @@ static int shell_command(void)
 
     command = get_string("command");
 
-    printf("Firing command: %s\n", command);
+    log_info("Firing command: %s", command);
 
     status = system(command);
     return WEXITSTATUS(status);

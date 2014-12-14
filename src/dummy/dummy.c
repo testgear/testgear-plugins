@@ -48,20 +48,23 @@ static int dummy_load(void)
     set_double("double0", 0.0);
     set_string("string0", "Hi world!");
 
+    log_info("Hello there!");
+    log_error("How are you?");
+
     return 0;
 }
 
 static int dummy_command0(void)
 {
-    printf("Running command0!\n");
+    log_info("Running command0!");
 
-    printf("char0 = %d\n", get_char("char0"));
-    printf("short0 = %d\n", get_short("short0"));
-    printf("int0 = %d\n", get_int("int0"));
-    printf("long0 = %ld\n", get_long("long0"));
-    printf("float0 = %.*f\n", FLT_DIG, get_float("float0"));
-    printf("double0 = %.*f\n", DBL_DIG, get_double("double0"));
-    printf("string0 = %s\n", get_string("string0"));
+    log_info("char0 = %d", get_char("char0"));
+    log_info("short0 = %d", get_short("short0"));
+    log_info("int0 = %d", get_int("int0"));
+    log_info("long0 = %ld", get_long("long0"));
+    log_info("float0 = %.*f", FLT_DIG, get_float("float0"));
+    log_info("double0 = %.*f", DBL_DIG, get_double("double0"));
+    log_info("string0 = %s", get_string("string0"));
 
     return 0;
 }

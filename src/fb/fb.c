@@ -81,14 +81,14 @@ static int open_device(char *device_name)
     fb.fd = open(device_name, O_RDWR);
     if (!fb.fd)
     {
-        printf("Error opening framebuffer device %s (%s)\n", device_name, strerror(errno));
+        log_error("Could not open framebuffer device %s (%s)", device_name, strerror(errno));
         return 1;
     }
 
     // Get variable screen information
     if (ioctl(fb.fd, FBIOGET_VSCREENINFO, &fb.vinfo))
     {
-        printf("Error reading variable screen information from %s (%s)\n", device_name, strerror(errno));
+        log_error("Could not read variable screen information from %s (%s)", device_name, strerror(errno));
         return 1;
     }
 
@@ -98,7 +98,7 @@ static int open_device(char *device_name)
     // Get fixed screen information
     if (ioctl(fb.fd, FBIOGET_FSCREENINFO, &fb.finfo))
     {
-        printf("Error reading fixed screen information from %s (%s)\n", device_name, strerror(errno));
+        log_error("Could not read fixed screen information from %s (%s)", device_name, strerror(errno));
         return 1;
     }
 
@@ -107,7 +107,7 @@ static int open_device(char *device_name)
     fb.mem = mmap(0, fb.screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb.fd, 0);
     if (fb.mem == MAP_FAILED)
     {
-        printf("Failed to map framebuffer memory\n");
+        log_error("Failed to map framebuffer memory");
         return 1;
     }
 
@@ -125,7 +125,7 @@ static int close_device(void)
     // Restore variable screen information
     if (ioctl(fb.fd, FBIOPUT_VSCREENINFO, &fb.vinfo_backup))
     {
-        printf("Error restoring variable screen information\n");
+        log_error("Could not restore variable screen information");
         return 1;
     }
 
@@ -265,14 +265,14 @@ static int fb_load(void)
 static int fb_unload(void)
 {
     // Action on unload
-    printf(" xres=%d\n", get_int("xres"));
-    printf(" yres=%d\n", get_int("yres"));
-    printf(" filename=%s\n", get_string("filename"));
-    printf(" name=%s\n", get_string("name"));
-    printf(" version=%s\n", get_string("version"));
-    printf(" description=%s\n", get_string("description"));
-    printf(" author=%s\n", get_string("author"));
-    printf(" license=%s\n", get_string("license"));
+    log_info(" xres=%d", get_int("xres"));
+    log_info(" yres=%d", get_int("yres"));
+    log_info(" filename=%s", get_string("filename"));
+    log_info(" name=%s", get_string("name"));
+    log_info(" version=%s", get_string("version"));
+    log_info(" description=%s", get_string("description"));
+    log_info(" author=%s", get_string("author"));
+    log_info(" license=%s", get_string("license"));
 
     return 0;
 }
@@ -295,18 +295,18 @@ static int fb_set_resolution(void)
     // Set variable screen information
     if (ioctl(fb.fd, FBIOPUT_VSCREENINFO, &fb.vinfo))
     {
-        printf("Error setting variable screen information in %s (%s)\n", device, strerror(errno));
+        log_error("Could not set variable screen information in %s (%s)", device, strerror(errno));
         return 1;
     }
 
     // Get fixed screen information
     if (ioctl(fb.fd, FBIOGET_FSCREENINFO, &fb.finfo))
     {
-        printf("Error reading fixed screen information from %s (%s)\n", device, strerror(errno));
+        log_error("Could not read fixed screen information from %s (%s)", device, strerror(errno));
         return 1;
     }
 
-    printf("Resolution %dx%d, depth %d bpp\n",
+    log_info("Resolution %dx%d, depth %d bpp",
             fb.vinfo.xres, fb.vinfo.yres,
             fb.vinfo.bits_per_pixel);
 
@@ -337,7 +337,7 @@ static int fb_set_depth(void)
         case 32:
             break;
         default:
-            printf("Error: depth must be 8, 16, 24 or 32\n");
+            log_error("depth must be 8, 16, 24 or 32");
             return 1;
     }
 
@@ -393,7 +393,7 @@ static int fb_set_depth(void)
     // Set variable screen information
     if (ioctl(fb.fd, FBIOPUT_VSCREENINFO, &fb.vinfo))
     {
-        printf("Error setting variable screen information in %s (%s)\n", device, strerror(errno));
+        log_error("Could not set variable screen information in %s (%s)", device, strerror(errno));
         return 1;
     }
 

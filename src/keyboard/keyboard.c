@@ -78,14 +78,14 @@ static int keyboard_wait_event(void)
     input = libinput_path_create_context(&interface, NULL);
     if (input == NULL)
     {
-        printf("libinput_path_create_context() failed\n");
+        log_error("libinput_path_create_context() failed");
         return EXIT_FAILURE;
     }
 
     input_device = libinput_path_add_device(input, get_string("device"));
     if (input_device == NULL)
     {
-        printf("libinput_path_add_device() failed\n");
+        log_error("libinput_path_add_device() failed");
         return EXIT_FAILURE;
     }
 
@@ -110,7 +110,7 @@ static int keyboard_wait_event(void)
         {
             if (libinput_event_get_type(ev) != LIBINPUT_EVENT_KEYBOARD_KEY)
             {
-                printf("Discarding non-keyboard event\n");
+                log_info("Discarding non-keyboard event");
                 libinput_event_destroy(ev);
                 libinput_dispatch(input);
                 continue;

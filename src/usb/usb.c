@@ -93,7 +93,7 @@ static void *transfer(void *args)
 
     // Get clock start time
     if (clock_gettime(CLOCK_MONOTONIC, &start) == -1)
-        fprintf(stderr, "Cannot get clock time\n");
+        log_error("Cannot get clock time");
     time_start = start.tv_sec + start.tv_nsec * 0.000000001;
 
     if (strcmp(mode, "loopback") == 0)
@@ -105,7 +105,7 @@ static void *transfer(void *args)
             counter = usb_bulk_write(handle, ep_out, tx_buffer, buffer_size, timeout);
             if (counter < 0)
             {
-                fprintf(stderr, "Error sending data: %s\n", usb_strerror());
+                log_error("Error sending data: %s", usb_strerror());
                 tx_errors++;
                 usleep(200000); // Wait 200 ms
                 continue;
@@ -116,7 +116,7 @@ static void *transfer(void *args)
             counter = usb_bulk_read(handle, ep_in, rx_buffer, buffer_size, timeout);
             if (rx_counter < 0)
             {
-                fprintf(stderr, "Error readin data: %s\n", usb_strerror());
+                log_error("Error reading data: %s", usb_strerror());
                 usleep(200000); // Wait 200 ms
                 rx_errors++;
                 continue;
@@ -141,7 +141,7 @@ static void *transfer(void *args)
             counter = usb_bulk_write(handle, ep_out, tx_buffer, buffer_size, timeout);
             if (counter < 0)
             {
-                fprintf(stderr, "Error sending data: %s\n", usb_strerror());
+                log_error("Error sending data: %s", usb_strerror());
                 tx_errors++;
                 usleep(200000); // Wait 200 ms
                 continue;
@@ -152,24 +152,24 @@ static void *transfer(void *args)
 
     // Get clock stop time
     if (clock_gettime(CLOCK_MONOTONIC, &stop) == -1)
-        fprintf(stderr, "Cannot get clock time\n");
+        log_error("Cannot get clock time");
     time_stop = stop.tv_sec + stop.tv_nsec * 0.000000001;
 
     // Print elapsed time
     double seconds = time_stop - time_start;
-    printf("Elapsed time: %f s\n", seconds);
+    log_info("Elapsed time: %f s", seconds);
 
     // Print size of data transmitted
-    printf("Number of bytes sent: %d bytes\n", tx_counter);
-    printf("Number of bytes received: %d bytes\n", rx_counter);
+    log_info("Number of bytes sent: %d bytes", tx_counter);
+    log_info("Number of bytes received: %d bytes", rx_counter);
 
     // Report performance result
     if (seconds)
         rate = (tx_counter + rx_counter) / seconds;
-    printf("Bandwidth rate: %.2f bytes/s\n", rate);
-    printf("TX errors: %d\n", tx_errors);
-    printf("RX errors: %d\n", rx_errors);
-    printf("Verify errors: %d\n", verify_errors);
+    log_info("Bandwidth rate: %.2f bytes/s", rate);
+    log_info("TX errors: %d", tx_errors);
+    log_info("RX errors: %d", rx_errors);
+    log_info("Verify errors: %d", verify_errors);
 
     return;
 }
@@ -199,7 +199,7 @@ static int usb_start(void)
 
     if (running == true)
     {
-        printf("Error: USB test already running\n");
+        log_error("USB test already running");
         return EXIT_FAILURE;
     }
 
@@ -215,14 +215,14 @@ static int usb_start(void)
     // Check test mode
     if ((strcmp(mode, "loopback") != 0) && (strcmp(mode, "tx") != 0))
     {
-        fprintf(stderr, "Invalid USB test mode (must be \"loopback\" or \"tx\")\n");
+        log_error("Invalid USB test mode (must be \"loopback\" or \"tx\")");
         return EXIT_FAILURE;
     }
 
     // Check buffer size
     if ((buffer_size != 512) && (buffer_size != 64))
     {
-        fprintf(stderr, "Invalid USB buffer size (must be 512 or 64)\n");
+        log_error("Invalid USB buffer size (must be 512 or 64)");
         return EXIT_FAILURE;
     }
 
@@ -232,14 +232,14 @@ static int usb_start(void)
         tx_buffer[i] = rand();
 
     // Log configuration
-    printf("USB test configuration:\n");
-    printf(" mode=%s\n", mode);
-    printf(" vid=%x\n", vid);
-    printf(" pid=%x\n", pid);
-    printf(" ep_in=%d\n", ep_in);
-    printf(" ep_out=%d\n", ep_out);
-    printf(" buffer_size=%d\n", buffer_size);
-    printf(" timeout=%d\n", timeout);
+    log_info("USB test configuration:");
+    log_info(" mode=%s", mode);
+    log_info(" vid=%x", vid);
+    log_info(" pid=%x", pid);
+    log_info(" ep_in=%d", ep_in);
+    log_info(" ep_out=%d", ep_out);
+    log_info(" buffer_size=%d", buffer_size);
+    log_info(" timeout=%d", timeout);
 
     // Initialize
     usb_init();         // Initialize libusb
@@ -249,20 +249,20 @@ static int usb_start(void)
     device = find_device(vid, pid);
     if (device == NULL)
     {
-        fprintf(stderr, "Cannot find device (vid=%x, pid=%x)\n", vid, pid);
+        log_error("Cannot find device (vid=%x, pid=%x)", vid, pid);
         return EXIT_FAILURE;
     }
 
     handle = usb_open(device);
     if (handle == NULL)
     {
-        fprintf(stderr, "Cannot open usb device (vid=%x, pid=%x)\n", vid, pid);
+        log_error("Cannot open usb device (vid=%x, pid=%x)", vid, pid);
         return EXIT_FAILURE;
     }
 
     if (usb_claim_interface(handle, 0) < 0)
     {
-        fprintf(stderr, "Error claiming interface 0: %s\n", usb_strerror());
+        log_error("Cannot claim interface 0: %s", usb_strerror());
         usb_close(handle);
         return EXIT_FAILURE;
     }
@@ -277,7 +277,7 @@ static int usb_start(void)
     sched_parameter.sched_priority = sched_get_priority_max(SCHED_FIFO);
     pthread_attr_setschedparam(&thread_attr, &sched_parameter);
 
-    printf("Starting USB test\n");
+    log_info("Starting USB test");
 
     // Reset performance metrics
     rx_errors = 0;
@@ -297,11 +297,11 @@ static int usb_stop(void)
 
     if (running == false)
     {
-        printf("Error: USB test already stopped\n");
+        log_error("USB test already stopped");
         return EXIT_FAILURE;
     }
 
-    printf("Stopping USB test\n");
+    log_info("Stopping USB test");
 
     // Stop transfer thread
     running = false;

@@ -66,7 +66,7 @@ static int cpu_start(void)
 
     if (running == true)
     {
-        printf("Error: CPU stress test already started\n");
+        log_error("CPU stress test already started");
         return EXIT_FAILURE;
     }
 
@@ -82,7 +82,7 @@ static int cpu_start(void)
     sched_parameter.sched_priority = sched_get_priority_max(SCHED_FIFO);
     pthread_attr_setschedparam(&thread_attr, &sched_parameter);
 
-    printf("Starting CPU stress (threads=%d)\n", threads);
+    log_info("Starting CPU stress (threads=%d)", threads);
 
     // Start CPU stress thread(s)
     running = true;
@@ -98,11 +98,11 @@ static int cpu_stop(void)
 
     if (running == false)
     {
-        printf("Error: CPU stress test already stopped\n");
+        log_error("CPU stress test already stopped");
         return EXIT_FAILURE;
     }
 
-    printf("Stopping CPU stress test\n");
+    log_info("Stopping CPU stress test");
 
     // Stop thread(s)
     running = false;
