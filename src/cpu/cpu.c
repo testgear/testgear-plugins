@@ -41,7 +41,7 @@
 #define MAX_THREADS 64
 
 static pthread_t stress_thread[MAX_THREADS];
-static bool running = false;
+static volatile bool running = false;
 static int threads;
 
 static void *cpu_stress(void *args)

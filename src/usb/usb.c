@@ -43,7 +43,7 @@
 #define USB_BUFSIZE_MAX 512
 
 static pthread_t usb_transfer_thread;
-static bool running = false;
+static volatile bool running = false;
 static struct usb_device *device;
 static usb_dev_handle *handle;
 static char tx_buffer[USB_BUFSIZE_MAX];
