@@ -54,6 +54,16 @@ static int dummy_load(void)
     return 0;
 }
 
+static int get_char0(void)
+{
+    return 0;
+}
+
+static int set_char0(void)
+{
+    return 0;
+}
+
 static int dummy_command0(void)
 {
     log_info("Running command0!");
@@ -74,6 +84,8 @@ static struct plugin_properties dummy_properties[] =
 {
     {   .name = "char0",
         .type = CHAR,
+        .get = get_char0,
+        .set = set_char0,
         .description = "Test char 0" },
 
     {   .name = "short0",
